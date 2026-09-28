@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ideas-creativas-prod
+
+resources:
+  - namespace.yaml
+  - ../../base
+
+nameSuffix: -prod
+
+# CAMBIA esto antes de aplicarlo en un clúster real (ver ../../../README.md).
+# secretGenerator (no un Secret plano) para que cambiar un valor aquí
+# produzca un nombre de Secret nuevo con sufijo hash, forzando un reinicio
+# del pod para tomarlo — la misma garantía que web/base ya le da a su ConfigMap.
+secretGenerator:
+  - name: mariadb-credenciales
+    literals:
+      - MARIADB_ROOT_PASSWORD=CHANGE_ME_ROOT_PASSWORD
+      - MARIADB_DATABASE=ideas_creativas
+      - MARIADB_USER=app
+      - MARIADB_PASSWORD=CHANGE_ME_APP_PASSWORD

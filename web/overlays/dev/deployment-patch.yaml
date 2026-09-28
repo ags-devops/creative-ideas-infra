@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ideas-creativas-api
+spec:
+  replicas: 1
+  # Un PVC ReadWriteOnce solo puede montarse en un pod a la vez, así que un
+  # rolling update (que corre brevemente el pod viejo y el nuevo juntos) se
+  # quedaría atascado. Recreate cambia unos segundos de downtime por esa
+  # seguridad, un intercambio aceptable para el entorno dev de una sola réplica.
+  strategy:
+    type: Recreate
+    rollingUpdate: null
+  template:
+    spec:
+      volumes:
+        - name: datos
+          emptyDir: null
+          persistentVolumeClaim:
+            claimName: ideas-creativas-api-datos

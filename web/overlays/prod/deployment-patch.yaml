@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ideas-creativas-api
+spec:
+  template:
+    spec:
+      containers:
+        - name: api
+          envFrom:
+            - configMapRef:
+                name: ideas-creativas-api-configuracion
+            - secretRef:
+                name: ideas-creativas-api-secreto

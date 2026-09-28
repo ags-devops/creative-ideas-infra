@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ideas-creativas-dev
+
+resources:
+  - namespace.yaml
+  - ../../base
+  - pvc.yaml
+
+patches:
+  - path: deployment-patch.yaml
+
+configMapGenerator:
+  - name: ideas-creativas-api-configuracion
+    behavior: merge
+    literals:
+      - APP_ENV=development
+      - DB_DRIVER=sqlite
+      - DB_DSN=file:/app/data/ideas.db?_pragma=busy_timeout(5000)&_pragma=journal_mode(WAL)
+      - REDIS_ADDR=ideas-creativas-cache:6379
+      - LOG_LEVEL=debug
+
+images:
+  - name: ghcr.io/ags-devops/creative-ideas-api
+    newTag: v0.2.0

@@ -1,0 +1,38 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ideas-creativas-test
+
+resources:
+  - namespace.yaml
+  - ../../base
+
+patches:
+  - path: deployment-patch.yaml
+
+replicas:
+  - name: ideas-creativas-api
+    count: 3
+
+configMapGenerator:
+  - name: ideas-creativas-api-configuracion
+    behavior: merge
+    literals:
+      - APP_ENV=test
+      - DB_DRIVER=mysql
+      - REDIS_ADDR=ideas-creativas-cache:6379
+
+# DB_DSN incluye la contraseña de la base de datos, así que es un Secret,
+# nunca un ConfigMap. CAMBIA la contraseña de abajo antes de aplicar esto en
+# un clúster real, y prefiere un gestor de secretos de verdad (Sealed
+# Secrets, External Secrets Operator, SOPS) en vez de literales planos para
+# cualquier uso más allá de aprendizaje/demo local.
+secretGenerator:
+  - name: ideas-creativas-api-secreto
+    literals:
+      - DB_DSN=app:CHANGE_ME_APP_PASSWORD@tcp(mariadb-test:3306)/ideas_creativas?parseTime=true
+      - REDIS_PASSWORD=
+
+images:
+  - name: ghcr.io/ags-devops/creative-ideas-api
+    newTag: v0.2.0

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ideas-creativas-cache
+  labels:
+    app.kubernetes.io/name: ideas-creativas-cache
+    app.kubernetes.io/component: cache
+spec:
+  selector:
+    app.kubernetes.io/name: ideas-creativas-cache
+  ports:
+    - name: valkey
+      port: 6379
+      targetPort: valkey
