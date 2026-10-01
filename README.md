@@ -5,7 +5,7 @@ Ideas API** (código fuente en [`app/`](app/), API REST en Go con
 arquitectura hexagonal — ver [`app/README.md`](app/README.md)) en tres
 entornos, todos a partir de la **misma imagen de contenedor**
 (`ghcr.io/ags-devops/creative-ideas-api`), cambiando solo configuración vía
-variables de entorno (12-factor; ver [`app/docs/12_FACTORES.md`](app/docs/12_FACTORES.md)):
+variables de entorno:
 
 | Entorno | Réplicas API | Base de datos              | Namespace              |
 |---------|:---:|----------------------------------------|--------------------------|
@@ -63,7 +63,7 @@ workload de base de datos aparte.
 - Un clúster de Kubernetes (local: [kind](https://kind.sigs.k8s.io/) o
   [minikube](https://minikube.sigs.k8s.io/); o uno remoto).
 - `kubectl` (incluye Kustomize integrado: `kubectl kustomize` / `kubectl apply -k`).
-- La imagen publicada en GHCR — ver [`app/docs/PUBLISH_IMAGE.md`](app/docs/PUBLISH_IMAGE.md).
+- La imagen publicada en GHCR.
   Mientras tanto, puedes construirla local (`docker build -t creative-ideas-api:local app/`)
   y cargarla a un clúster kind (`kind load docker-image creative-ideas-api:local`),
   ajustando la imagen del overlay que pruebes.
@@ -110,9 +110,6 @@ kubectl -n ideas-creativas-dev get pods
 kubectl -n ideas-creativas-dev port-forward svc/ideas-creativas-api 8080:80
 curl localhost:8080/healthz
 ```
-
-Luego sigue [`app/docs/API_CLIENT_GUIDE.md`](app/docs/API_CLIENT_GUIDE.md)
-para probar el CRUD completo con un cliente de API gratuito.
 
 ## Notas
 
